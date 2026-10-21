@@ -5,6 +5,7 @@ import { errorMessage } from '@/api/client';
 import { AssetCard } from '@/balances/asset-card';
 import { portfolioUsd } from '@/balances/balances';
 import { useBalances } from '@/balances/use-balances';
+import { RecentClaims } from '@/claims/recent-claims';
 import { formatUsd } from '@/money/usd';
 import { Button } from '@/ui/button';
 import { Screen } from '@/ui/screen';
@@ -56,6 +57,8 @@ export default function Home() {
           </Text>
         </View>
       )}
+
+      <RecentClaims now={now} />
 
       {data.items.length === 0 ? (
         <Text style={styles.muted}>No payback yet.</Text>

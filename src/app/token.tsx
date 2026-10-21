@@ -26,7 +26,7 @@ export default function TokenScreen() {
     try {
       await getBalances(candidate); // check the token before keeping it
       setToken(candidate);
-      router.replace('/');
+      router.dismissTo('/'); // back to Home if it is below; on first open it replaces this screen
     } catch (e) {
       setError(
         e instanceof ApiError && e.code === 'UNAUTHORIZED'
@@ -58,7 +58,7 @@ export default function TokenScreen() {
       />
       {error && <Text style={styles.error}>{error}</Text>}
       <Button title={token ? 'Change token' : 'Save token'} onPress={save} loading={checking} />
-      {token && <Button title="Cancel" variant="secondary" onPress={() => router.replace('/')} />}
+      {token && <Button title="Cancel" variant="secondary" onPress={() => router.dismissTo('/')} />}
     </Screen>
   );
 }

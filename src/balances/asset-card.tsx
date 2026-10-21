@@ -1,7 +1,10 @@
+import { router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { formatUnits } from '@/money/decimal';
 import { formatUsd, toUsd } from '@/money/usd';
+import { Button } from '@/ui/button';
+import { DetailRow } from '@/ui/detail-row';
 import { colors } from '@/ui/theme';
 
 import { assetTotal, Balance } from './balances';
@@ -13,24 +16,14 @@ export function AssetCard({ balance }: { balance: Balance }) {
 
   return (
     <View style={styles.card}>
-      <View style={styles.row}>
+      <View style={styles.header}>
         <Text style={styles.asset}>{asset}</Text>
         <Text style={styles.usd}>≈ {formatUsd(usd)}</Text>
       </View>
-      <Line label="Available" value={amount(balance.available)} strong />
-      {balance.pending > 0n && <Line label="Pending" value={amount(balance.pending)} />}
-      {balance.claiming > 0n && <Line label="Claiming" value={amount(balance.claiming)} />}
-    </View>
-  );
-}
-
-function Line({ label, value, strong = false }: { label: string; value: string; strong?: boolean }) {
-  return (
-    <View style={styles.row}>
-      <Text style={styles.label}>{label}</Text>
-      <Text style={[styles.value, strong && styles.strong]} selectable>
-        {value}
-      </Text>
+      <DetailRow label="Available" value={amount(balance.available)} strong />
+      {balance.pending > 0n && <DetailRow label="Pending" value={amount(balance.pending)} />}
+      {balance.claiming > 0n && <DetailRow label="Claiming" value={amount(balance.claiming)} />}
+      <Button title={`Claim ${asset}`} variant="secondary" onPress={() => router.push(`/claim/${asset}`)} />
     </View>
   );
 }
@@ -42,7 +35,7 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 8,
   },
-  row: {
+  header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'baseline',
@@ -56,19 +49,5 @@ const styles = StyleSheet.create({
   usd: {
     fontSize: 15,
     color: colors.muted,
-  },
-  label: {
-    fontSize: 15,
-    color: colors.muted,
-  },
-  value: {
-    flexShrink: 1,
-    textAlign: 'right',
-    fontSize: 15,
-    color: colors.text,
-    fontVariant: ['tabular-nums'],
-  },
-  strong: {
-    fontWeight: '600',
   },
 });
