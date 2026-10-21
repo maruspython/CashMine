@@ -4,7 +4,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { errorMessage } from '@/api/client';
 import { AssetCard } from '@/balances/asset-card';
 import { portfolioUsd } from '@/balances/balances';
-import { useBalances } from '@/balances/use-balances';
+import { useAdjustedBalances } from '@/balances/use-balances';
 import { RecentClaims } from '@/claims/recent-claims';
 import { formatUsd } from '@/money/usd';
 import { Button } from '@/ui/button';
@@ -13,7 +13,7 @@ import { colors } from '@/ui/theme';
 import { formatAge, useNow } from '@/ui/time';
 
 export default function Home() {
-  const { data, error, isFetching, refetch } = useBalances();
+  const { data, adjusted, error, isFetching, refetch } = useAdjustedBalances();
   const now = useNow(1000);
   const changeToken = <Button title="Change API token" variant="secondary" onPress={() => router.push('/token')} />;
 
@@ -48,6 +48,9 @@ export default function Home() {
           <Text style={styles.muted}>Updated {formatAge(data.asOf, now)}</Text>
           <Button title="Refresh" variant="secondary" onPress={() => refetch()} loading={isFetching} />
         </View>
+        {adjusted && (
+          <Text style={styles.muted}>Includes your latest claim. The server data will show it within 15 s.</Text>
+        )}
       </View>
 
       {error && (

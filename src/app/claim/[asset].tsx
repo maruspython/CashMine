@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { ApiError, errorMessage } from '@/api/client';
-import { useBalances } from '@/balances/use-balances';
+import { useAdjustedBalances } from '@/balances/use-balances';
 import { useClaimOptions } from '@/claims/claim-options';
 import { useClaims } from '@/claims/claims-context';
 import { isUnresolved } from '@/claims/local-claims';
@@ -22,7 +22,8 @@ type Review = { amount: string; fee: bigint; receive: bigint; destinationId: str
 export default function ClaimScreen() {
   const { asset } = useLocalSearchParams<{ asset: string }>();
   const queryClient = useQueryClient();
-  const balances = useBalances();
+  // Adjusted: a claim made a moment ago is already out of `available`, so Max cannot reuse it.
+  const balances = useAdjustedBalances();
   const balance = balances.data?.items.find((item) => item.asset === asset);
   const options = useClaimOptions(asset, balance?.decimals);
   const { records, submit } = useClaims();

@@ -36,6 +36,11 @@ export function RecentClaims({ now }: { now: number }) {
             <Text style={styles.muted} numberOfLines={1}>
               to {record.destinationLabel}
             </Text>
+            {record.claim?.status === 'failed' && (
+              <Text style={styles.failure}>
+                {`${record.claim.failureReason ?? 'Failed'}\nThe amount is back in your available balance.`}
+              </Text>
+            )}
           </View>
           <Text style={[styles.status, { color: statusColor(record) }]}>{statusText(record)} ›</Text>
         </Pressable>
@@ -90,5 +95,9 @@ const styles = StyleSheet.create({
   status: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  failure: {
+    fontSize: 13,
+    color: colors.danger,
   },
 });
