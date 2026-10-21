@@ -1,56 +1,39 @@
-# Welcome to your Expo app 👋
+# CashMine payback
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Live:** https://olehmarusdev-cashmine.expo.app
 
-## Get started
+Open it on a phone and paste your API token. The app keeps the token in this browser only. You can change it with "Change API token" on Home.
 
-1. Install dependencies
+## Run locally
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+I used Node 24.
 
 ```bash
-npm run reset-project
+npm install
+npm run web        # starts Expo and opens the app in the browser
+npm test           # unit tests
+npx tsc --noEmit   # typecheck
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+- The API base URL is in `src/config.ts`.
+- Build: `npx expo export --platform web` writes the site to `dist/`.
+- Deploy: `npx eas-cli@latest deploy --prod`.
 
-### Other setup steps
+## What works
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+- **Token:** the app checks the token before saving it. An invalid or expired token brings you back to the token screen.
+- **Balances (Home):**
+  - each asset's available, pending and claiming amounts
+  - "Total incl. pending" and "available to claim" in USD
+  - when the data was updated, and a Refresh button
+  - loading, error and retry states, and an automatic refresh every 15 s
+- **Claim:**
+  - pick where the money goes, then enter an amount or tap Max
+  - see the fee and the amount you receive, review, confirm
+  - input is checked against the API rules
+  - safe retries with an Idempotency-Key, and "Check again" when the result is unknown
+- **Claim status:** follows the claim until it completes or fails, and shows the failure reason. "Your claims" on Home lists claims that are in progress or just finished.
+- **Balance after a claim:** changes at once and never jumps back (see `NOTES.md`).
+- **Unit tests:** amount parsing and validation, fee, USD totals, the claim retry rule, and the balance adjustment.
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+**Not done:** Activity (history). See `NOTES.md` for decisions and known issues.
