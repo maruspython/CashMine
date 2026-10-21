@@ -4,8 +4,10 @@
   "main": "expo-router/entry",
   "dependencies": {
     "@expo/ui": "~58.0.21",
+    "@tanstack/react-query": "^5.104.5",
     "expo": "~58.0.16",
     "expo-constants": "~58.0.12",
+    "expo-crypto": "~58.0.7",
     "expo-device": "~58.0.5",
     "expo-font": "~58.0.9",
     "expo-glass-effect": "~58.0.4",
@@ -45,6 +47,5 @@
   "jest": {
     "preset": "jest-expo"
   },
-  "private": true,
-  "packageManager": "yarn@3.6.4+sha512.e70835d4d6d62c07be76b3c1529cb640c7443f0fe434ef4b6478a5a399218cbaf1511b396b3c56eb03bc86424cff2320f6167ad2fde273aa0df6e60b7754029f"
+  "private": true
 }
